@@ -1,9 +1,12 @@
 import {
   AhrimsRobeskirt,
   AhrimsRobetop,
+  AmuletOfGlory,
   AncestralRobebottom,
   AncestralRobetop,
   AncientStaff,
+  AntlerGuard,
+  ArmadylBrew,
   AvasAccumulator,
   AvasAssembler,
   BarrowsGloves,
@@ -24,8 +27,10 @@ import {
   DiamondBoltsE,
   DizanasQuiver,
   DragonArrows,
+  GuthixMitre,
   GuthixRobeTop,
   HolyBlessing,
+  HuntersSunlightCrossbow,
   InfernalCape,
   Item,
   ItemName,
@@ -38,6 +43,7 @@ import {
   MasoriBodyF,
   MasoriChapsF,
   MasoriMaskF,
+  MoonlightAntlerBolts,
   NecklaceOfAnguish,
   OccultNecklace,
   PegasianBoots,
@@ -452,6 +458,54 @@ export class InfernoLoadout {
     };
   }
 
+  loadoutHcMars() {
+    return {
+      equipment: {
+        weapon: new RuneCrossbow(),
+        offhand: new AntlerGuard(),
+        helmet: new GuthixMitre(),
+        necklace: new AmuletOfGlory(),
+        cape: new AvasAccumulator(),
+        ammo: new RubyBoltsE(),
+        chest: new GuthixRobeTop(),
+        legs: new SaradominChaps(),
+        feet: new DevoutBoots(),
+        gloves: new BlackDhideVambraces(),
+        ring: null,
+      },
+      inventory: [
+        new KodaiWand(),
+        new HuntersSunlightCrossbow(),
+        new MoonlightAntlerBolts(),
+        new DiamondBoltsE(),
+        new SaradominBrew(),
+        new SaradominBrew(),
+        new SaradominBrew(),
+        new SuperRestore(),
+        new SuperRestore(),
+        new SuperRestore(),
+        new SuperRestore(),
+        new SuperRestore(),
+        new SuperRestore(),
+        new ArmadylBrew(),
+        new ArmadylBrew(),
+        new ArmadylBrew(),
+        new StaminaPotion(),
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ],
+    };
+  }
+
   findItemByName(list: Item[], name: ItemName) {
     return indexOf(map(list, "itemName"), name);
   }
@@ -485,6 +539,18 @@ export class InfernoLoadout {
         player.stats.defence = 1;
         player.currentStats.defence = 1;
         break;
+      case "hc_mars":
+        player.stats.hitpoint = 93;
+        player.currentStats.hitpoint = 93;
+        player.stats.prayer = 65;
+        player.currentStats.prayer = 65;
+        player.stats.range = 93;
+        player.currentStats.range = 93;
+        player.stats.magic = 94;
+        player.currentStats.magic = 94;
+        player.stats.defence = 1;
+        player.currentStats.defence = 1;
+        break;
     }
   }
 
@@ -515,9 +581,12 @@ export class InfernoLoadout {
       case "max_melee":
         loadout = this.loadoutMaxMelee();
         break;
+      case "hc_mars":
+        loadout = this.loadoutHcMars();
+        break;
     }
 
-    if (this.wave > 66 && this.wave <= 69) {
+    if (this.wave > 66 && this.wave <= 69 && this.loadoutType !== "hc_mars") {
       // switch necklace to range dps necklace
       loadout.inventory[this.findItemByName(loadout.inventory, ItemName.NECKLACE_OF_ANGUISH)] = new OccultNecklace();
       loadout.equipment.necklace = new NecklaceOfAnguish();
@@ -528,6 +597,7 @@ export class InfernoLoadout {
         ItemName.TWISTED_BOW,
         ItemName.BOWFA,
         ItemName.RUNE_CROSSBOW,
+        ItemName.HUNTERS_SUNLIGHT_CROSSBOW,
       ]);
       loadout.equipment.weapon = loadout.inventory[bow] as Weapon;
       loadout.inventory[bow] = staff;
@@ -563,7 +633,7 @@ export class InfernoLoadout {
       }
     }
 
-    if (this.onTask && this.loadoutType !== "pure") {
+    if (this.onTask && this.loadoutType !== "pure" && this.loadoutType !== "hc_mars") {
       loadout.equipment.helmet = new SlayerHelmet();
     }
 
