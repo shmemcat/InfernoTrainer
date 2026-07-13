@@ -28,6 +28,19 @@ const config = {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 8000,
+    // The production asset CDN (oldschool-cdn.com) only allows production
+    // origins via CORS, so the browser can't fetch it directly from localhost.
+    // Proxy "/cdn" through the dev server (a server-side request, not subject
+    // to browser CORS) so assets/models load during local development.
+    // Assets.getCdnBaseUrl() returns "/cdn" when running on localhost.
+    proxy: {
+      "/cdn": {
+        target: "https://oldschool-cdn.com",
+        changeOrigin: true,
+        secure: true,
+        pathRewrite: { "^/cdn": "" },
+      },
+    },
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
